@@ -29,8 +29,8 @@ namespace MobileWCF.Mobile.Views
                 BasicHttpBinding httpBinding = new BasicHttpBinding();
                 EndpointAddress address = new EndpointAddress(strAddress);
 
-                ChannelFactory<ICalculatorService> channel = 
-                    new ChannelFactory<ICalculatorService>(httpBinding, address);
+                ChannelFactory<ICalculatorServiceAsyncAPM> channel = 
+                    new ChannelFactory<ICalculatorServiceAsyncAPM>(httpBinding, address);
        
                 var calculator = channel.CreateChannel(address);
                 var num1 = Convert.ToInt32(eNum1.Text);
@@ -47,7 +47,7 @@ namespace MobileWCF.Mobile.Views
         private void Callback(IAsyncResult result)
         {
             var msg = "";
-            var res = result.AsyncState as ICalculatorService;
+            var res = result.AsyncState as ICalculatorServiceAsyncAPM;
             if (res != null)
                 msg = res.EndGetSum(result);
 

@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace MobileWCF.ServerHost
 {
-    public class CalculatorService : ICalculatorService
+    public class CalculatorServiceAsyncAPM : CalculatorServiceAsyncTAP, ICalculatorServiceAsyncAPM
     {
-        public Task<string> GetSum(int a, int b)
-        {
-            return Task.Factory.StartNew(() => ((long)(a + b)).ToString());
-        }
-
         public IAsyncResult BeginGetSum(int a, int b, AsyncCallback callback, object state)
         {
             var tcs = new TaskCompletionSource<string>(state);
@@ -43,6 +38,22 @@ namespace MobileWCF.ServerHost
             {
                 throw ex.InnerException;
             }
+        }
+    }
+
+    public class CalculatorServiceAsyncTAP : CalculatorServiceSync, ICalculatorServiceAsyncTAP
+    {
+        public new Task<string> GetSum(int a, int b)
+        {
+            return Task.Factory.StartNew(() => base.GetSum(a, b));
+        }
+    }
+
+    public class CalculatorServiceSync : ICalculatorServiceSync
+    {
+        public string GetSum(int a, int b)
+        {
+            return ((long)a + b).ToString();
         }
     }
 }

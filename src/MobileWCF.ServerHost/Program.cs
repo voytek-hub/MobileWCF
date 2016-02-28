@@ -12,7 +12,7 @@ namespace MobileWCF.ServerHost
         static void Main(string[] args)
         {
             Uri[] addressBase = new Uri[] { new Uri("http://localhost:9003/CalculatorService") };
-            var host = new ServiceHost(typeof(CalculatorService), addressBase);
+            var host = new ServiceHost(typeof(CalculatorServiceAsyncAPM), addressBase);
             host.Open();
             Console.Read();
         }
