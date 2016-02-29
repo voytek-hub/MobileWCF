@@ -27,4 +27,29 @@ namespace MobileWCF.Proxies
             return await proxy.GetSum(a, b);
         }
     }
+
+    public class CalculatorProxyAPM : ICalculatorServiceAsyncAPM
+    {
+        private ICalculatorServiceAsyncAPM proxy = null;
+
+        public CalculatorProxyAPM()
+        {
+            string address = "http://localhost:9003/CalculatorService";
+            Uri addressBase = new Uri(address);
+            EndpointAddress endpoint = new EndpointAddress(address);
+            BasicHttpBinding bHttp = new BasicHttpBinding();
+            ChannelFactory<ICalculatorServiceAsyncAPM> channel = new ChannelFactory<ICalculatorServiceAsyncAPM>(bHttp, endpoint);
+            proxy = channel.CreateChannel(endpoint);
+        }
+
+        public IAsyncResult BeginGetSum(int a, int b, AsyncCallback callback, object state = null)
+        {
+            return proxy.BeginGetSum(a, b, callback, proxy);
+        }
+
+        public string EndGetSum(IAsyncResult asyncResult)
+        {
+            return proxy.EndGetSum(asyncResult);
+        }
+    }
 }

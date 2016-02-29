@@ -1,9 +1,10 @@
-﻿using MobileWCF.Mobile.Views;
+﻿using MobileWCF.Contracts;
+using MobileWCF.Mobile.Views;
+using MobileWCF.Proxies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Xamarin.Forms;
 
 namespace MobileWCF.Mobile
@@ -13,7 +14,8 @@ namespace MobileWCF.Mobile
         public App()
         {
             // The root page of your application
-            MainPage = new FirstPage();
+            ICalculatorServiceAsyncAPM proxyAPM = new CalculatorProxyAPM();
+            MainPage = new FirstPage(proxyAPM);
         }
 
         protected override void OnStart()

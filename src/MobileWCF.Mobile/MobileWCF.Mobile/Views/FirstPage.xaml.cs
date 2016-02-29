@@ -14,10 +14,18 @@ namespace MobileWCF.Mobile.Views
 {
     public partial class FirstPage : ContentPage
     {
+        ICalculatorServiceAsyncAPM proxyAPM;
         public FirstPage()
         {
             InitializeComponent();
             b1.Clicked += OnButtonClicked;
+        }
+
+        public FirstPage(ICalculatorServiceAsyncAPM proxy)
+        {
+            InitializeComponent();
+            b1.Clicked += OnButtonClicked;
+            proxyAPM = proxy;
         }
 
         void OnButtonClicked(object sender, EventArgs e)
@@ -25,17 +33,18 @@ namespace MobileWCF.Mobile.Views
             Debug.WriteLine("Clicked");
             try
             {
-                string strAddress = "http://localhost:9003/CalculatorService";
-                BasicHttpBinding httpBinding = new BasicHttpBinding();
-                EndpointAddress address = new EndpointAddress(strAddress);
+                //string strAddress = "http://localhost:9003/CalculatorService";
+                //BasicHttpBinding httpBinding = new BasicHttpBinding();
+                //EndpointAddress address = new EndpointAddress(strAddress);
 
-                ChannelFactory<ICalculatorServiceAsyncAPM> channel = 
-                    new ChannelFactory<ICalculatorServiceAsyncAPM>(httpBinding, address);
-       
-                var calculator = channel.CreateChannel(address);
+                //ChannelFactory<ICalculatorServiceAsyncAPM> channel = 
+                //    new ChannelFactory<ICalculatorServiceAsyncAPM>(httpBinding, address);
+
+                //var calculator = channel.CreateChannel(address);
+
                 var num1 = Convert.ToInt32(eNum1.Text);
                 var num2 = Convert.ToInt32(eNum2.Text);
-                calculator.BeginGetSum(num1, num2, Callback, calculator);
+                proxyAPM.BeginGetSum(num1, num2, Callback);
             }
             catch (Exception ex)
             {

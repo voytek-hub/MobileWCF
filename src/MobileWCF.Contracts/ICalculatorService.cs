@@ -11,7 +11,7 @@ namespace MobileWCF.Contracts
     public interface ICalculatorServiceAsyncAPM
     {
         [OperationContract(AsyncPattern = true)]
-        IAsyncResult BeginGetSum(int a, int b, AsyncCallback callback, object state);
+        IAsyncResult BeginGetSum(int a, int b, AsyncCallback callback, object state = null);
         string EndGetSum(IAsyncResult asyncResult);
     }
 
