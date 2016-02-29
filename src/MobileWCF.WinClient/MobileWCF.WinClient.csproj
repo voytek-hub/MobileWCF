@@ -85,6 +85,14 @@
       <Project>{0159743f-b3c8-4365-922c-8c8418630184}</Project>
       <Name>MobileWCF.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MobileWCF.Domain\MobileWCF.Domain.csproj">
+      <Project>{5b0d0f76-9ab8-4770-af9d-8b446a67dfcb}</Project>
+      <Name>MobileWCF.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MobileWCF.Proxies\MobileWCF.Proxies.csproj">
+      <Project>{c3e0f693-58a8-49d0-8b86-1b24266bb784}</Project>
+      <Name>MobileWCF.Proxies</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

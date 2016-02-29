@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MobileWCF.Contracts;
+using MobileWCF.Domain;
+using MobileWCF.Proxies;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +19,10 @@ namespace MobileWCF.WinClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+            ICalculatorServiceAsyncTAP proxy = new CalculatorProxy();
+            Calculator calculatorApi = new Calculator(proxy);
+            Application.Run(new MainForm(calculatorApi));
         }
     }
 }

@@ -10,16 +10,24 @@ using System.Windows.Forms;
 using System.ServiceModel;
 using MobileWCF.Contracts;
 using System.Diagnostics;
+using MobileWCF.Domain;
 
 namespace MobileWCF.WinClient
 {
     public partial class MainForm : Form
     {
-        string strAddress = "http://localhost:9003/CalculatorService";
+        private readonly Calculator calculatorDomain;
+        private readonly string strAddress = "http://localhost:9003/CalculatorService";
 
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        public MainForm(Calculator calculator)
+        {
+            InitializeComponent();
+            calculatorDomain = calculator;
         }
 
         private void bAddAsyncAPM_Click(object sender, EventArgs e)
@@ -45,13 +53,17 @@ namespace MobileWCF.WinClient
 
         private async void bAddAsyncTAP_Click(object sender, EventArgs e)
         {
-            BasicHttpBinding httpBinding = new BasicHttpBinding();
-            EndpointAddress address = new EndpointAddress(strAddress);
-            ChannelFactory<ICalculatorServiceAsyncTAP> channel = new ChannelFactory<ICalculatorServiceAsyncTAP>(httpBinding, address);
-            var calculator = channel.CreateChannel(address);
+            //BasicHttpBinding httpBinding = new BasicHttpBinding();
+            //EndpointAddress address = new EndpointAddress(strAddress);
+            //ChannelFactory<ICalculatorServiceAsyncTAP> channel = new ChannelFactory<ICalculatorServiceAsyncTAP>(httpBinding, address);
+            //var calculator = channel.CreateChannel(address);
+            //var num1 = Convert.ToInt32(tbNum1.Text);
+            //var num2 = Convert.ToInt32(tbNum2.Text);
+            //lResult.Text = await calculator.GetSum(num1, num2);
+
             var num1 = Convert.ToInt32(tbNum1.Text);
             var num2 = Convert.ToInt32(tbNum2.Text);
-            lResult.Text = await calculator.GetSum(num1, num2);
+            lResult.Text = await calculatorDomain.Add(num1, num2);
         }
 
         private void bAddSync_Click(object sender, EventArgs e)
