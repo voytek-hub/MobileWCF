@@ -11,6 +11,7 @@ namespace MobileWCF.ServerHost
     {
         public IAsyncResult BeginGetSum(int a, int b, AsyncCallback callback, object state)
         {
+            Console.WriteLine("BeginGetSum");
             var tcs = new TaskCompletionSource<string>(state);
             var task = GetSum(a, b);
             task.ContinueWith(t =>
@@ -32,10 +33,17 @@ namespace MobileWCF.ServerHost
         {
             try
             {
+                Console.WriteLine("EndGetSum");
                 return ((Task<string>)asyncResult).Result;
             }
             catch (AggregateException ex)
             {
+                Console.WriteLine(ex);
+                throw ex.InnerException;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
                 throw ex.InnerException;
             }
         }

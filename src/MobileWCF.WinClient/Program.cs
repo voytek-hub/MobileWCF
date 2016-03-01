@@ -20,7 +20,7 @@ namespace MobileWCF.WinClient
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            ICalculatorServiceAsyncTAP proxy = new CalculatorProxy();
+            ICalculatorProxy proxy = new CalculatorProxyAsync<ICalculatorServiceAsyncAPM>();
             Calculator calculatorApi = new Calculator(proxy);
             Application.Run(new MainForm(calculatorApi));
         }

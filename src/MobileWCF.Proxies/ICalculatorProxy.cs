@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace MobileWCF.Proxies
 {
-    //public interface ICalculatorProxy
-    //{
-    //    Task<string> GetSum(int a, int b);
-    //}
+    public interface ICalculatorProxy
+    {
+        Task<string> GetSum(int a, int b);
+    }
 }

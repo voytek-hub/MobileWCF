@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MobileWCF.Proxies;
 
 namespace MobileWCF.Domain
 {
     public class Calculator
     {
-        private readonly ICalculatorServiceAsyncTAP proxy;
+        private readonly ICalculatorProxy proxy;
 
-        public Calculator(ICalculatorServiceAsyncTAP proxy)
+        public Calculator(ICalculatorProxy proxy)
         {
             this.proxy = proxy;
         }

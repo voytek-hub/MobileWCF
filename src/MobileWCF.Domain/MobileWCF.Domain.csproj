@@ -39,6 +39,10 @@
       <Project>{0159743f-b3c8-4365-922c-8c8418630184}</Project>
       <Name>MobileWCF.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MobileWCF.Proxies\MobileWCF.Proxies.csproj">
+      <Project>{c3e0f693-58a8-49d0-8b86-1b24266bb784}</Project>
+      <Name>MobileWCF.Proxies</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculator.cs" />

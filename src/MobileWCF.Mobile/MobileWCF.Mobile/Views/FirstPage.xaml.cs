@@ -9,26 +9,28 @@ using System.Threading.Tasks;
 using System.Threading;
 
 using Xamarin.Forms;
+using MobileWCF.Domain;
 
 namespace MobileWCF.Mobile.Views
 {
     public partial class FirstPage : ContentPage
     {
-        ICalculatorServiceAsyncAPM proxyAPM;
+        private readonly Calculator calculatorDomain;
+
         public FirstPage()
         {
             InitializeComponent();
             b1.Clicked += OnButtonClicked;
         }
 
-        public FirstPage(ICalculatorServiceAsyncAPM proxy)
+        public FirstPage(Calculator calculator)
         {
             InitializeComponent();
             b1.Clicked += OnButtonClicked;
-            proxyAPM = proxy;
+            calculatorDomain = calculator;
         }
 
-        void OnButtonClicked(object sender, EventArgs e)
+        async void OnButtonClicked(object sender, EventArgs e)
         {
             Debug.WriteLine("Clicked");
             try
@@ -44,7 +46,13 @@ namespace MobileWCF.Mobile.Views
 
                 var num1 = Convert.ToInt32(eNum1.Text);
                 var num2 = Convert.ToInt32(eNum2.Text);
-                proxyAPM.BeginGetSum(num1, num2, Callback);
+                //proxyAPM.BeginGetSum(num1, num2, Callback);
+
+                var msg = "None";
+                if (calculatorDomain != null)
+                    msg = await calculatorDomain?.Add(num1, num2);
+
+                Device.BeginInvokeOnMainThread(() => lResult.Text = msg);
             }
             catch (Exception ex)
             {
@@ -53,14 +61,14 @@ namespace MobileWCF.Mobile.Views
             }
         }
 
-        private void Callback(IAsyncResult result)
-        {
-            var msg = "";
-            var res = result.AsyncState as ICalculatorServiceAsyncAPM;
-            if (res != null)
-                msg = res.EndGetSum(result);
+        //private void Callback(IAsyncResult result)
+        //{
+        //    var msg = "";
+        //    var res = result.AsyncState as ICalculatorServiceAsyncAPM;
+        //    if (res != null)
+        //        msg = res.EndGetSum(result);
 
-            Device.BeginInvokeOnMainThread(() => lResult.Text = msg);
-        }
+        //    Device.BeginInvokeOnMainThread(() => lResult.Text = msg);
+        //}
     }
 }
