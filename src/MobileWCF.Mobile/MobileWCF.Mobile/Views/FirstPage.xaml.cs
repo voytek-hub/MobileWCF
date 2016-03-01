@@ -1,43 +1,51 @@
-﻿using System;
+﻿using MobileWCF.Contracts;
+using System;
 using System.Diagnostics;
+using System.ServiceModel;
 using Xamarin.Forms;
-using MobileWCF.Domain;
 
 namespace MobileWCF.Mobile.Views
 {
     public partial class FirstPage : ContentPage
     {
-        private readonly Calculator calculatorDomain;
-
-        public FirstPage(Calculator calculator = null)
+        public FirstPage()
         {
             InitializeComponent();
             b1.Clicked += OnButtonClicked;
-            calculatorDomain = calculator;
         }
 
-        async void OnButtonClicked(object sender, EventArgs e)
+        void OnButtonClicked(object sender, EventArgs e)
         {
-            Debug.WriteLine("Button clicked");
-
-            if (calculatorDomain == null)
-                throw new ArgumentNullException("calculatorDomain");
-
+            Debug.WriteLine("Clicked");
             try
             {
+                string strAddress = "http://localhost:9003/CalculatorService";
+                BasicHttpBinding httpBinding = new BasicHttpBinding();
+                EndpointAddress address = new EndpointAddress(strAddress);
+
+                ChannelFactory<ICalculatorService> channel =
+                    new ChannelFactory<ICalculatorService>(httpBinding, address);
+
+                var calculator = channel.CreateChannel(address);
                 var num1 = Convert.ToInt32(eNum1.Text);
                 var num2 = Convert.ToInt32(eNum2.Text);
-                var msg = await calculatorDomain?.Add(num1, num2);
-
-                Device.BeginInvokeOnMainThread(() => lResult.Text = msg);
+                calculator.BeginGetSum(num1, num2, Callback, calculator);
             }
             catch (Exception ex)
             {
-                lResult.Text = "Exception: " + ex.Message;
-                Debug.WriteLine("--- Exception ------------------------------------------");
+                lResult.Text = ex.Message;
                 Debug.WriteLine(ex);
-                Debug.WriteLine("--------------------------------------------------------");
             }
+        }
+
+        private void Callback(IAsyncResult result)
+        {
+            var msg = "";
+            var res = result.AsyncState as ICalculatorService;
+            if (res != null)
+                msg = res.EndGetSum(result);
+
+            Device.BeginInvokeOnMainThread(() => lResult.Text = msg);
         }
     }
 }
