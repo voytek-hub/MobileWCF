@@ -39,11 +39,13 @@
       <Project>{0159743f-b3c8-4365-922c-8c8418630184}</Project>
       <Name>MobileWCF.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MobileWCF.Domain\MobileWCF.Domain.csproj">
+      <Project>{5b0d0f76-9ab8-4770-af9d-8b446a67dfcb}</Project>
+      <Name>MobileWCF.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalculatorProxy.cs" />
-    <Compile Include="CalculatorProxyAsync.cs" />
-    <Compile Include="ICalculatorProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

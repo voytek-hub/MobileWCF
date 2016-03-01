@@ -1,10 +1,5 @@
-﻿using MobileWCF.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MobileWCF.Proxies;
+﻿using System.Threading.Tasks;
+using MobileWCF.Domain.Interfaces;
 
 namespace MobileWCF.Domain
 {

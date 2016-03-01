@@ -1,30 +1,41 @@
 ﻿using MobileWCF.Contracts;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MobileWCF.ServerHost
 {
-    public class CalculatorServiceAsyncAPM : CalculatorServiceAsyncTAP, ICalculatorServiceAsyncAPM
+    public class CalculatorService : ICalculatorService
     {
         public IAsyncResult BeginGetSum(int a, int b, AsyncCallback callback, object state)
         {
-            Console.WriteLine("BeginGetSum");
+            Console.WriteLine("BeginGetSum: {0}+{1}", a, b);
             var tcs = new TaskCompletionSource<string>(state);
-            var task = GetSum(a, b);
+            var task = Task.Factory.StartNew(() => ((long)a + b).ToString());
             task.ContinueWith(t =>
             {
                 if (t.IsFaulted)
+                {
+                    Console.WriteLine("BeginGetSum: t.IsFaulted");
                     tcs.TrySetException(t.Exception.InnerExceptions);
+                }
                 else if (t.IsCanceled)
+                {
+                    Console.WriteLine("BeginGetSum: t.IsCanceled");
                     tcs.TrySetCanceled();
+                }
                 else
+                {
                     tcs.TrySetResult(t.Result);
+                }
 
                 if (callback != null)
+                {
                     callback(tcs.Task);
+                }
+                else
+                {
+                    Console.WriteLine("BeginGetSum: callback is null!");
+                }
             });
             return tcs.Task;
         }
@@ -33,8 +44,9 @@ namespace MobileWCF.ServerHost
         {
             try
             {
-                Console.WriteLine("EndGetSum");
-                return ((Task<string>)asyncResult).Result;
+                string result = ((Task<string>)asyncResult).Result;
+                Console.WriteLine("EndGetSum: {0}", result);
+                return result;
             }
             catch (AggregateException ex)
             {
@@ -46,22 +58,6 @@ namespace MobileWCF.ServerHost
                 Console.WriteLine(ex);
                 throw ex.InnerException;
             }
-        }
-    }
-
-    public class CalculatorServiceAsyncTAP : CalculatorServiceSync, ICalculatorServiceAsyncTAP
-    {
-        public new Task<string> GetSum(int a, int b)
-        {
-            return Task.Factory.StartNew(() => base.GetSum(a, b));
-        }
-    }
-
-    public class CalculatorServiceSync : ICalculatorServiceSync
-    {
-        public string GetSum(int a, int b)
-        {
-            return ((long)a + b).ToString();
         }
     }
 }

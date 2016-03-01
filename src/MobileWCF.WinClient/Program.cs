@@ -1,10 +1,7 @@
-﻿using MobileWCF.Contracts;
-using MobileWCF.Domain;
+﻿using MobileWCF.Domain;
+using MobileWCF.Domain.Interfaces;
 using MobileWCF.Proxies;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MobileWCF.WinClient
@@ -20,7 +17,7 @@ namespace MobileWCF.WinClient
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            ICalculatorProxy proxy = new CalculatorProxyAsync<ICalculatorServiceAsyncAPM>();
+            ICalculatorProxy proxy = new CalculatorProxy();
             Calculator calculatorApi = new Calculator(proxy);
             Application.Run(new MainForm(calculatorApi));
         }
