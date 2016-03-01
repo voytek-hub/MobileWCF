@@ -14,7 +14,7 @@ namespace MobileWCF.Proxies
 
         public CalculatorProxy()
         {
-            string address = "http://localhost:9003/CalculatorService";
+            string address = "http://192.168.106.164:9003/CalculatorService";
             Uri addressBase = new Uri(address);
             EndpointAddress endpoint = new EndpointAddress(address);
             BasicHttpBinding bHttp = new BasicHttpBinding();
@@ -34,7 +34,7 @@ namespace MobileWCF.Proxies
 
         public CalculatorProxyAPM()
         {
-            string address = "http://localhost:9003/CalculatorService";
+            string address = "http://192.168.106.164:9003/CalculatorService";
             Uri addressBase = new Uri(address);
             EndpointAddress endpoint = new EndpointAddress(address);
             BasicHttpBinding bHttp = new BasicHttpBinding();

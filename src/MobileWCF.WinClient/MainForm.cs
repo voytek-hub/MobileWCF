@@ -17,7 +17,7 @@ namespace MobileWCF.WinClient
     public partial class MainForm : Form
     {
         private readonly Calculator calculatorDomain;
-        private readonly string strAddress = "http://localhost:9003/CalculatorService";
+        private readonly string strAddress = "http://192.168.106.164:9003/CalculatorService";
 
         public MainForm()
         {

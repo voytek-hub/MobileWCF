@@ -11,7 +11,7 @@ namespace MobileWCF.ServerHost
     {
         static void Main(string[] args)
         {
-            Uri[] addressBase = new Uri[] { new Uri("http://localhost:9003/CalculatorService") };
+            Uri[] addressBase = new Uri[] { new Uri("http://192.168.106.164:9003/CalculatorService") };
             var host = new ServiceHost(typeof(CalculatorServiceAsyncAPM), addressBase);
             host.Open();
             Console.Read();

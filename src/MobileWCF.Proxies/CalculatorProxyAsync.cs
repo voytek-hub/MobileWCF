@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MobileWCF.Proxies
@@ -12,40 +13,32 @@ namespace MobileWCF.Proxies
     public class CalculatorProxyAsync<T> : ICalculatorProxy
     {
         private string returnedValue;
-        private ICalculatorServiceAsyncAPM proxyAPM;
-        private ICalculatorServiceAsyncTAP proxyTAP;
         private object proxy;
+        private readonly ManualResetEvent waitForIt = new ManualResetEvent(false);
 
         public CalculatorProxyAsync()
         {
             returnedValue = "not yet";
-            string address = "http://localhost:9003/CalculatorService";
+            string address = "http://192.168.106.164:9003/CalculatorService";
             Uri addressBase = new Uri(address);
             EndpointAddress endpoint = new EndpointAddress(address);
             BasicHttpBinding bHttp = new BasicHttpBinding();
             ChannelFactory<T> channel = new ChannelFactory<T>(bHttp, endpoint);
             proxy = channel.CreateChannel(endpoint);
-            
-            if ((proxy as ICalculatorServiceAsyncAPM) != null)
-            {
-                proxyAPM = (channel.CreateChannel(endpoint) as ICalculatorServiceAsyncAPM);
-            }
-            if ((proxy as ICalculatorServiceAsyncTAP) != null)
-            {
-                proxyTAP = (channel.CreateChannel(endpoint) as ICalculatorServiceAsyncTAP);
-            }
         }
 
         public async Task<string> GetSum(int a, int b)
         {
             if ((proxy as ICalculatorServiceAsyncAPM) != null)
             {
-                proxyAPM.BeginGetSum(a, b, Callback, proxyAPM);
-                while(returnedValue.Equals("not yet"))
-                {
-                    await Task.Delay(10);
-                }
-                return await Task.Factory.StartNew(() => returnedValue);
+                Task<string> getDataTask = 
+                    new TaskFactory().FromAsync((proxy as ICalculatorServiceAsyncAPM).BeginGetSum, 
+                                                (proxy as ICalculatorServiceAsyncAPM).EndGetSum, 
+                                                a,
+                                                b, 
+                                                null, 
+                                                TaskCreationOptions.None);
+                return await getDataTask;
             }
 
             if ((proxy as ICalculatorServiceAsyncTAP) != null)
@@ -62,6 +55,7 @@ namespace MobileWCF.Proxies
             if (res != null)
             {
                 returnedValue = res.EndGetSum(result);
+                waitForIt.Set();
             }
         }
 
